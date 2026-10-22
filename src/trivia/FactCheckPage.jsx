@@ -7,8 +7,8 @@ import { loadMonsters, loadFixedLists, buildQuestion } from './factCheck'
 export default function FactCheckPage() {
   const { db, error } = useDb()
 
-  if (error) return <p className="p-8 text-red-600">Error: {error}</p>
-  if (!db) return <p className="p-8 text-gray-500">Loading database...</p>
+  if (error) return <p className="min-h-screen bg-gray-950 p-8 text-red-400">Error: {error}</p>
+  if (!db) return <p className="min-h-screen bg-gray-950 p-8 text-gray-400">Loading database...</p>
   return <FactCheckGame db={db} />
 }
 
@@ -65,82 +65,84 @@ function FactCheckGame({ db }) {
   const gotItRight = isAnswered && selected === question?.answerParam
 
   return (
-    <div className="mx-auto max-w-md p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <Link to="/" className="text-sm font-medium text-indigo-600 hover:underline">
-          ← Home
-        </Link>
-        <p className="text-sm font-semibold text-gray-700">
-          Score: {score} / {answered}
-        </p>
-      </div>
-
-      {!question ? (
-        <div className="rounded-xl border border-gray-200 p-6 text-center">
-          <p className="text-lg font-semibold">Round complete!</p>
-          <p className="mt-1 text-gray-600">Final score: {score} / {answered}</p>
-          <button
-            onClick={handleRestart}
-            className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
-          >
-            Play again
-          </button>
+    <div className="min-h-screen bg-gray-950 p-6">
+      <div className="mx-auto max-w-md">
+        <div className="mb-4 flex items-center justify-between">
+          <Link to="/" className="text-sm font-medium text-indigo-400 hover:underline">
+            ← Home
+          </Link>
+          <p className="text-sm font-semibold text-gray-300">
+            Score: {score} / {answered}
+          </p>
         </div>
-      ) : (
-        <div className="rounded-xl border border-gray-200 p-6 shadow-sm">
-          <div className="flex h-44 items-center justify-center rounded-lg bg-gray-50">
-            <img
+
+        {!question ? (
+          <div className="rounded-xl bg-white p-6 text-center">
+            <p className="text-lg font-semibold text-gray-900">Round complete!</p>
+            <p className="mt-1 text-gray-600">Final score: {score} / {answered}</p>
+            <button
+              onClick={handleRestart}
+              className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
+            >
+              Play again
+            </button>
+          </div>
+        ) : (
+          <div className="rounded-xl bg-white p-6">
+            <div className="flex h-44 items-center justify-center rounded-lg bg-gray-200">
+              <img
                 src={`/sprites/${monster.id}.gif`}
                 alt={monster.name}
                 className="max-h-40 object-contain"
-            />
+              />
             </div>
-          <p className="mt-3 text-center text-xl font-bold text-gray-900">{monster.name}</p>
+            <p className="mt-3 text-center text-xl font-bold text-gray-900">{monster.name}</p>
 
-          <h1 className="mt-4 text-lg font-bold text-gray-900">
-            Which of these is{' '}
-            <span className={question.kind === 'true' ? 'text-green-600' : 'text-red-600'}>
-            {question.kind === 'true' ? 'TRUE' : 'FALSE'}
-            </span>
-            ?
-          </h1>
+            <h1 className="mt-4 text-lg font-bold text-gray-900">
+              Which of these is{' '}
+              <span className={question.kind === 'true' ? 'text-green-600' : 'text-red-600'}>
+                {question.kind === 'true' ? 'TRUE' : 'FALSE'}
+              </span>
+              ?
+            </h1>
 
-          <div className="mt-3 space-y-2">
-            {question.options.map((opt) => (
-              <button
-                key={opt.param}
-                onClick={() => handlePick(opt.param)}
-                disabled={isAnswered}
-                className={optionClasses(opt, question, selected)}
-              >
-                <span className="font-semibold">{opt.label}:</span> {opt.shown}
-                {isAnswered && !opt.isTrue && (
-                  <span className="ml-2 text-xs text-gray-500">(actual: {opt.actual})</span>
-                )}
-              </button>
-            ))}
+            <div className="mt-3 space-y-2">
+              {question.options.map((opt) => (
+                <button
+                  key={opt.param}
+                  onClick={() => handlePick(opt.param)}
+                  disabled={isAnswered}
+                  className={optionClasses(opt, question, selected)}
+                >
+                  <span className="font-semibold">{opt.label}:</span> {opt.shown}
+                  {isAnswered && !opt.isTrue && (
+                    <span className="ml-2 text-xs text-gray-500">(actual: {opt.actual})</span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {isAnswered && (
+              <>
+                <p
+                  className={`mt-4 rounded-lg px-3 py-2 font-medium ${
+                    gotItRight ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}
+                >
+                  {gotItRight ? 'Correct!' : 'Not quite.'}
+                </p>
+                <button
+                  onClick={handleNext}
+                  autoFocus
+                  className="mt-3 w-full rounded-lg bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700"
+                >
+                  Next monster
+                </button>
+              </>
+            )}
           </div>
-
-          {isAnswered && (
-            <>
-              <p
-                className={`mt-4 rounded-lg px-3 py-2 font-medium ${
-                  gotItRight ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                }`}
-              >
-                {gotItRight ? 'Correct!' : 'Not quite.'}
-              </p>
-              <button
-                onClick={handleNext}
-                autoFocus
-                className="mt-3 w-full rounded-lg bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700"
-              >
-                Next monster
-              </button>
-            </>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

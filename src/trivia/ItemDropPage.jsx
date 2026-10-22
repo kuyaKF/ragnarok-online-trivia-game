@@ -7,8 +7,8 @@ import { loadItemPools, buildItemQueue, buildItemQuestion } from './itemDrops'
 export default function ItemDropPage() {
   const { db, error } = useDb()
 
-  if (error) return <p className="p-8 text-red-600">Error: {error}</p>
-  if (!db) return <p className="p-8 text-gray-500">Loading database...</p>
+  if (error) return <p className="min-h-screen bg-gray-950 p-8 text-red-400">Error: {error}</p>
+  if (!db) return <p className="min-h-screen bg-gray-950 p-8 text-gray-400">Loading database...</p>
   return <ItemDropGame db={db} />
 }
 
@@ -61,84 +61,86 @@ function ItemDropGame({ db }) {
   }
 
   return (
-    <div className="mx-auto max-w-lg p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <Link to="/" className="text-sm font-medium text-indigo-600 hover:underline">
-          ← Home
-        </Link>
-        <p className="text-sm font-semibold text-gray-700">
-          Score: {score} / {answered}
-        </p>
+    <div className="min-h-screen bg-gray-950 p-6">
+      <div className="mx-auto max-w-lg">
+        <div className="mb-4 flex items-center justify-between">
+          <Link to="/" className="text-sm font-medium text-indigo-400 hover:underline">
+            ← Home
+          </Link>
+          <p className="text-sm font-semibold text-gray-300">
+            Score: {score} / {answered}
+          </p>
+        </div>
+
+        {!question ? (
+          <div className="rounded-xl bg-white p-6 text-center">
+            <p className="text-lg font-semibold text-gray-900">Round complete!</p>
+            <p className="mt-1 text-gray-600">Final score: {score} / {answered}</p>
+            <button
+              onClick={handleRestart}
+              className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
+            >
+              Play again
+            </button>
+          </div>
+        ) : (
+          <div className="rounded-xl bg-white p-6">
+            <div className="flex flex-col items-center rounded-lg bg-gray-200 p-4">
+              <img
+                src={itemSpriteUrl(question.item)}
+                alt=""
+                className="h-14 w-14 object-contain"
+              />
+              <p className="mt-2 text-xl font-bold text-gray-900">{question.item.item_name}</p>
+            </div>
+
+            <h1 className="mt-4 text-lg font-bold text-gray-900">
+              Which monster drops this item?
+            </h1>
+
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              {question.options.map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => handlePick(opt)}
+                  disabled={isAnswered}
+                  className={optionClasses(opt, picked)}
+                >
+                  <img
+                    src={`/sprites/${opt.id}.gif`}
+                    alt=""
+                    className="h-24 object-contain"
+                  />
+                  <span className="mt-2 font-medium text-gray-900">{opt.name}</span>
+                  {isAnswered && opt.isCorrect && (
+                    <span className="text-xs text-gray-600">drops at {opt.rate}%</span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {isAnswered && (
+              <>
+                <p
+                  className={`mt-4 rounded-lg px-3 py-2 font-medium ${
+                    wasRight ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}
+                >
+                  {wasRight ? 'Correct!' : 'Not quite.'} This item drops from{' '}
+                  {question.totalDroppers} monster{question.totalDroppers === 1 ? '' : 's'} in total.
+                </p>
+                <button
+                  onClick={handleNext}
+                  autoFocus
+                  className="mt-3 w-full rounded-lg bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700"
+                >
+                  Next question
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
-
-      {!question ? (
-        <div className="rounded-xl border border-gray-200 p-6 text-center">
-          <p className="text-lg font-semibold">Round complete!</p>
-          <p className="mt-1 text-gray-600">Final score: {score} / {answered}</p>
-          <button
-            onClick={handleRestart}
-            className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
-          >
-            Play again
-          </button>
-        </div>
-      ) : (
-        <div className="rounded-xl border border-gray-200 p-6 shadow-sm">
-          <div className="flex flex-col items-center rounded-lg bg-gray-50 p-4">
-            <img
-              src={itemSpriteUrl(question.item)}
-              alt=""
-              className="h-14 w-14 object-contain"
-            />
-            <p className="mt-2 text-xl font-bold text-gray-900">{question.item.item_name}</p>
-          </div>
-
-          <h1 className="mt-4 text-lg font-bold text-gray-900">
-            Which monster drops this item?
-          </h1>
-
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            {question.options.map((opt) => (
-              <button
-                key={opt.id}
-                onClick={() => handlePick(opt)}
-                disabled={isAnswered}
-                className={optionClasses(opt, picked)}
-              >
-                <img
-                  src={`/sprites/${opt.id}.gif`}
-                  alt=""
-                  className="h-24 object-contain"
-                />
-                <span className="mt-2 font-medium text-gray-900">{opt.name}</span>
-                {isAnswered && opt.isCorrect && (
-                  <span className="text-xs text-gray-600">drops at {opt.rate}%</span>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {isAnswered && (
-            <>
-              <p
-                className={`mt-4 rounded-lg px-3 py-2 font-medium ${
-                  wasRight ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                }`}
-              >
-                {wasRight ? 'Correct!' : 'Not quite.'} This item drops from{' '}
-                {question.totalDroppers} monster{question.totalDroppers === 1 ? '' : 's'} in total.
-              </p>
-              <button
-                onClick={handleNext}
-                autoFocus
-                className="mt-3 w-full rounded-lg bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700"
-              >
-                Next question
-              </button>
-            </>
-          )}
-        </div>
-      )}
     </div>
   )
 }
