@@ -1,11 +1,14 @@
 # Ragnarok Online Trivia Game
 
-A web-based trivia game about Ragnarok Online, featuring a monster database with detailed information, pagination, and full monster profiles.
+A web-based trivia game about Ragnarok Online, featuring a monster database with pagination, three trivia game modes, and full monster profiles.
 
 ## Features
 
-- **Monster Database**: Browse all monsters from the Ragnarok Online database
-- **Pagination**: Navigate through monsters 20 at a time
+- **Monster Database**: Browse all monsters from the Ragnarok Online database with pagination
+- **Three Trivia Games**:
+  - **Guess the Monster**: Identify monsters from their sprites
+  - **True or False**: Answer element/resistance questions about monsters
+  - **Item Drops**: Match items to the monsters that drop them
 - **Monster Details**: View complete information including attributes, elements, resistances, drops, modes, and spawning maps
 - **Responsive Design**: Works well on mobile and desktop
 
@@ -15,7 +18,6 @@ A web-based trivia game about Ragnarok Online, featuring a monster database with
 - **Vite** for fast development and building
 - **TailwindCSS** for styling
 - **sql.js** for in-browser SQLite database
-- **React Compiler** not enabled (performance impact)
 
 ## Available Scripts
 
@@ -32,6 +34,9 @@ The monster data is loaded from `assets/monsters.db` using sql.js WASM. The data
 
 ## Page Structure
 
-- `/` - Home page with link to the database
-- `/db` - Monster database with pagination and search
-- `/db/:id` - Detailed monster profile with attributes, resistances, drops, and more
+- `/` - Home page with links to trivia games and database
+- `/db` - Monster database with pagination
+- `/db/:id` - Detailed monster profile with attributes, resistances, drops, modes, and spawning maps
+- `/trivia/name` - Guess the Monster trivia game
+- `/trivia/facts` - True or False trivia game
+- `/trivia/drops` - Item Drops trivia game
