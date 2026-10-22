@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useParams } from 'react-router-dom'
 import { useDb, query } from './db'
 import NameGuessPage from './trivia/NameGuessPage'
+import FactCheckPage from './trivia/FactCheckPage'
+import { itemSpriteUrl } from './trivia/itemSprite'
+import ItemDropPage from './trivia/ItemDropPage'
 
 const PAGE_SIZE = 20
 
@@ -51,6 +54,12 @@ function Home() {
       </Link>
       <Link to="/trivia/name" className="mt-4 ml-3 inline-block rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">
         Guess the monster
+      </Link>
+      <Link to="/trivia/facts" className="mt-4 ml-3 inline-block rounded-lg bg-amber-600 px-4 py-2 font-medium text-white hover:bg-amber-700">
+        Fact Check
+      </Link>
+      <Link to="/trivia/drops" className="mt-4 ml-3 inline-block rounded-lg bg-rose-600 px-4 py-2 font-medium text-white hover:bg-rose-700">
+        Item drops
       </Link>
     </div>
   )
@@ -274,8 +283,14 @@ function MonsterDetail() {
         ) : (
           <ul className="divide-y divide-gray-100 rounded-lg border border-gray-200">
             {drops.map((d, i) => (
-              <li key={`${d.item_id}-${i}`} className="flex justify-between px-4 py-2 text-sm">
-                <span className="text-gray-800">{d.item_name}</span>
+              <li
+                key={`${d.item_id}-${i}`}
+                className="flex items-center justify-between px-4 py-2 text-sm"
+              >
+                <div className="flex items-center gap-2">
+                  <img src={itemSpriteUrl(d)} alt="" className="h-6 w-6 object-contain" />
+                  <span className="text-gray-800">{d.item_name}</span>
+                </div>
                 <span className="tabular-nums text-gray-500">{d.rate_percent}%</span>
               </li>
             ))}
@@ -293,6 +308,8 @@ function App() {
       <Route path="/db" element={<Database />} />
       <Route path="/db/:id" element={<MonsterDetail />} />
       <Route path="/trivia/name" element={<NameGuessPage />} />
+      <Route path="/trivia/facts" element={<FactCheckPage />} />
+      <Route path="/trivia/drops" element={<ItemDropPage />} />
     </Routes>
   )
 }
