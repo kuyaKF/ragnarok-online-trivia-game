@@ -1,16 +1,37 @@
-# React + Vite
+# Ragnarok Online Trivia Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based trivia game about Ragnarok Online, featuring a monster database with detailed information, pagination, and full monster profiles.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Monster Database**: Browse all monsters from the Ragnarok Online database
+- **Pagination**: Navigate through monsters 20 at a time
+- **Monster Details**: View complete information including attributes, elements, resistances, drops, modes, and spawning maps
+- **Responsive Design**: Works well on mobile and desktop
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19** with React Router for navigation
+- **Vite** for fast development and building
+- **TailwindCSS** for styling
+- **sql.js** for in-browser SQLite database
+- **React Compiler** not enabled (performance impact)
 
-## Expanding the ESLint configuration
+## Available Scripts
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Command | Description |
+|---------|-------------|
+| `dev` | Starts the development server at `http://localhost:5000` |
+| `build` | Builds the production app |
+| `lint` | Runs ESLint to check for code issues |
+| `preview` | Preview the production build locally |
+
+## Database
+
+The monster data is loaded from `assets/monsters.db` using sql.js WASM. The database contains Ragnarok Online monster information including stats, elements, resistances, drops, and spawning locations.
+
+## Page Structure
+
+- `/` - Home page with link to the database
+- `/db` - Monster database with pagination and search
+- `/db/:id` - Detailed monster profile with attributes, resistances, drops, and more
