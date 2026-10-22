@@ -48,7 +48,7 @@ export default function Home() {
         <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
           Ragnarok Online Trivia
         </h1>
-        <p className="mt-3 text-lg text-gray-400">Test your knowledge by Felix</p>
+        <p className="mt-3 text-lg text-gray-400">Test your knowledge, made by Felix</p>
       </header>
 
       <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
