@@ -1,4 +1,13 @@
 import { Link } from 'react-router-dom'
+import SpriteBackground from './SpriteBackground'
+
+// in Home():
+<main className="relative isolate min-h-screen bg-gray-950 px-6 py-16">
+  <SpriteBackground />
+  <div className="relative z-10">
+    {/* ...your existing header, grid of game cards, and footer go here... */}
+  </div>
+</main>
 
 // `color` shows until the cover image loads (or if it's missing)
 const GAMES = [
@@ -43,28 +52,31 @@ function GameCard({ game }) {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gray-950 px-6 py-16">
-      <header className="mx-auto max-w-5xl text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
-          Ragnarok Online Trivia
-        </h1>
-        <p className="mt-3 text-lg text-gray-400">Test your knowledge, made by Felix</p>
-      </header>
+    <main className="relative isolate min-h-screen bg-gray-950 px-6 py-16">
+      <SpriteBackground />
+        <div className="relative z-10">
+            <header className="mx-auto max-w-5xl text-center">
+                <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
+                Ragnarok Online Trivia
+                </h1>
+                <p className="mt-3 text-lg text-gray-400">Test your knowledge, made by Felix</p>
+            </header>
 
-      <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {GAMES.map((game) => (
-          <GameCard key={game.to} game={game} />
-        ))}
-      </div>
+            <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {GAMES.map((game) => (
+                <GameCard key={game.to} game={game} />
+                ))}
+            </div>
 
-      <footer className="mt-16 text-center text-xs text-gray-500">
-        <Link to="/db" className="hover:text-gray-300 hover:underline">
-          Browse the monster database
-        </Link>
-        <p className="mt-2">
-          Fan-made project, not affiliated with Gravity. Game data and sprites from ratemyserver.net.
-        </p>
-      </footer>
+            <footer className="mt-16 text-center text-xs text-gray-500">
+                <Link to="/db" className="hover:text-gray-300 hover:underline">
+                Browse the monster database
+                </Link>
+                <p className="mt-2">
+                Fan-made project, not affiliated with Gravity. Game data and sprites from ratemyserver.net.
+                </p>
+            </footer>
+        </div>
     </main>
   )
 }
