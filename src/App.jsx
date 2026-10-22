@@ -1,8 +1,28 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
-import { getDb, query } from './db'
+import { Routes, Route, Link, useParams } from 'react-router-dom'
+import { useDb, query } from './db'
 
 const PAGE_SIZE = 20
+
+const RESISTANCES = ['neutral', 'water', 'earth', 'fire', 'wind', 'poison', 'holy', 'shadow', 'ghost', 'undead']
+
+function Stat({ label, value }) {
+  return (
+    <div className="rounded-lg bg-gray-50 px-3 py-2">
+      <div className="text-xs uppercase tracking-wide text-gray-500">{label}</div>
+      <div className="font-semibold tabular-nums text-gray-900">{value ?? '—'}</div>
+    </div>
+  )
+}
+
+function Section({ title, children }) {
+  return (
+    <section className="mt-6">
+      <h2 className="mb-2 text-lg font-semibold text-gray-900">{title}</h2>
+      {children}
+    </section>
+  )
+}
 
 // Full class names must appear literally in the source, otherwise Tailwind won't generate them
 const ELEMENT_STYLES = {
@@ -44,13 +64,8 @@ function PageButton({ children, ...props }) {
 }
 
 function Database() {
-  const [db, setDb] = useState(null)
-  const [error, setError] = useState(null)
+  const { db, error } = useDb()
   const [page, setPage] = useState(1)
-
-  useEffect(() => {
-    getDb().then(setDb).catch((err) => setError(err.message))
-  }, [])
 
   if (error) {
     return <p className="p-8 text-red-600">Error: {error}</p>
@@ -106,7 +121,9 @@ function Database() {
                 </td>
                 <td className="px-4 py-2 tabular-nums text-gray-500">{m.id}</td>
                 <td className="px-4 py-2">
-                  <div className="font-medium">{m.name}</div>
+                  <Link to={`/db/${m.id}`} className="font-medium text-indigo-600 hover:underline">
+                    {m.name}
+                  </Link>
                   <div className="text-xs text-gray-400">{m.internal_name}</div>
                 </td>
                 <td className="px-4 py-2 tabular-nums">{m.level}</td>
@@ -145,11 +162,132 @@ function Database() {
   )
 }
 
+function MonsterDetail() {
+  const { id } = useParams()
+  const { db, error } = useDb()
+
+  if (error) return <p className="p-8 text-red-600">Error: {error}</p>
+  if (!db) return <p className="p-8 text-gray-500">Loading database...</p>
+
+  const m = query(db, 'SELECT * FROM monsters WHERE id = ?', [Number(id)])[0]
+  if (!m) {
+    return (
+      <div className="p-8">
+        <p className="text-gray-700">No monster with ID {id}.</p>
+        <Link to="/db" className="text-indigo-600 hover:underline">← Back to database</Link>
+      </div>
+    )
+  }
+
+  const drops = query(
+    db,
+    'SELECT item_id, item_name, rate_percent FROM drops WHERE mob_id = ? ORDER BY rate_percent DESC',
+    [m.id]
+  )
+  const modes = m.modes ? m.modes.split('; ') : []
+  const maps = m.maps ? m.maps.split('; ') : []
+
+  return (
+    <div className="mx-auto max-w-4xl p-6">
+      <Link to="/db" className="text-sm font-medium text-indigo-600 hover:underline">
+        ← Back to database
+      </Link>
+
+      <div className="mt-4 flex items-center gap-5">
+        <img src={`/sprites/${m.id}.gif`} alt={m.name} className="h-28 w-28 object-contain" />
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">{m.name}</h1>
+          <p className="text-gray-500">
+            {m.internal_name} · ID #{m.id}
+          </p>
+          <div className="mt-2 flex gap-2">
+            {m.is_mvp === 1 && (
+              <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700">MVP</span>
+            )}
+            {m.is_guild_variant === 1 && (
+              <span className="rounded-full bg-slate-200 px-2.5 py-0.5 text-xs font-medium text-slate-700">Guild variant</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <Section title="Overview">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Stat label="Level" value={m.level} />
+          <Stat label="HP" value={m.hp.toLocaleString()} />
+          <Stat label="Race" value={m.race} />
+          <Stat label="Element" value={`${m.element} ${m.element_level}`} />
+          <Stat label="Size" value={m.size} />
+          <Stat label="Attack" value={m.attack_min != null ? `${m.attack_min}–${m.attack_max}` : null} />
+          <Stat label="Def / MDef" value={`${m.defense} / ${m.magic_defense}`} />
+          <Stat label="Hit / Flee" value={`${m.hit} / ${m.flee}`} />
+          <Stat label="Base Exp" value={m.base_exp?.toLocaleString()} />
+          <Stat label="Job Exp" value={m.job_exp?.toLocaleString()} />
+          {m.is_mvp === 1 && <Stat label="MVP Exp" value={m.mvp_exp?.toLocaleString()} />}
+          <Stat label="Walk speed" value={m.walk_speed} />
+        </div>
+      </Section>
+
+      <Section title="Attributes">
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+          {['str', 'agi', 'vit', 'int', 'dex', 'luk'].map((s) => (
+            <Stat key={s} label={s} value={m[s]} />
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Element resistance (damage taken)">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+          {RESISTANCES.map((el) => (
+            <Stat key={el} label={el} value={`${m[`res_${el}`]}%`} />
+          ))}
+        </div>
+      </Section>
+
+      {modes.length > 0 && (
+        <Section title="Mode">
+          <ul className="flex flex-wrap gap-2">
+            {modes.map((mode) => (
+              <li key={mode} className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700">{mode}</li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      {maps.length > 0 && (
+        <Section title="Found on maps">
+          <ul className="flex flex-wrap gap-2">
+            {maps.map((map) => (
+              <li key={map} className="rounded-md bg-gray-100 px-2 py-1 font-mono text-sm text-gray-700">{map}</li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      <Section title={`Drops (${drops.length})`}>
+        {drops.length === 0 ? (
+          <p className="text-gray-500">No drops recorded.</p>
+        ) : (
+          <ul className="divide-y divide-gray-100 rounded-lg border border-gray-200">
+            {drops.map((d, i) => (
+              <li key={`${d.item_id}-${i}`} className="flex justify-between px-4 py-2 text-sm">
+                <span className="text-gray-800">{d.item_name}</span>
+                <span className="tabular-nums text-gray-500">{d.rate_percent}%</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Section>
+    </div>
+  )
+}
+
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/db" element={<Database />} />
+      <Route path="/db/:id" element={<MonsterDetail />} />
     </Routes>
   )
 }
