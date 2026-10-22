@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useParams } from 'react-router-dom'
 import { useDb, query } from './db'
+import NameGuessPage from './trivia/NameGuessPage'
 
 const PAGE_SIZE = 20
 
@@ -47,6 +48,9 @@ function Home() {
         className="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
       >
         View the database
+      </Link>
+      <Link to="/trivia/name" className="mt-4 ml-3 inline-block rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">
+        Guess the monster
       </Link>
     </div>
   )
@@ -288,6 +292,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/db" element={<Database />} />
       <Route path="/db/:id" element={<MonsterDetail />} />
+      <Route path="/trivia/name" element={<NameGuessPage />} />
     </Routes>
   )
 }
