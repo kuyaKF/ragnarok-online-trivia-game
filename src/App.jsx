@@ -5,6 +5,7 @@ import NameGuessPage from './trivia/NameGuessPage'
 import FactCheckPage from './trivia/FactCheckPage'
 import { itemSpriteUrl } from './trivia/itemSprite'
 import ItemDropPage from './trivia/ItemDropPage'
+import Home from './Home'
 
 const PAGE_SIZE = 20
 
@@ -40,29 +41,6 @@ const ELEMENT_STYLES = {
   Shadow: 'bg-slate-300 text-slate-800',
   Ghost: 'bg-indigo-100 text-indigo-700',
   Undead: 'bg-zinc-300 text-zinc-800',
-}
-
-function Home() {
-  return (
-    <div className="mx-auto max-w-3xl p-8">
-      <h1 className="text-3xl font-bold text-gray-900">Hello World</h1>
-      <Link
-        to="/db"
-        className="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
-      >
-        View the database
-      </Link>
-      <Link to="/trivia/name" className="mt-4 ml-3 inline-block rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">
-        Guess the monster
-      </Link>
-      <Link to="/trivia/facts" className="mt-4 ml-3 inline-block rounded-lg bg-amber-600 px-4 py-2 font-medium text-white hover:bg-amber-700">
-        Fact Check
-      </Link>
-      <Link to="/trivia/drops" className="mt-4 ml-3 inline-block rounded-lg bg-rose-600 px-4 py-2 font-medium text-white hover:bg-rose-700">
-        Item drops
-      </Link>
-    </div>
-  )
 }
 
 function PageButton({ children, ...props }) {
