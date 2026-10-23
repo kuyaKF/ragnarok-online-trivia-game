@@ -1,0 +1,20 @@
+import { Route, Routes } from 'react-router-dom'
+import DatabasePage from '@/features/database/DatabasePage'
+import MonsterDetailPage from '@/features/database/MonsterDetailPage'
+import HomePage from '@/features/home/HomePage'
+import ItemDropPage from '@/features/trivia/drops/ItemDropPage'
+import FactCheckPage from '@/features/trivia/facts/FactCheckPage'
+import NameGuessPage from '@/features/trivia/name/NameGuessPage'
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/db" element={<DatabasePage />} />
+      <Route path="/db/:id" element={<MonsterDetailPage />} />
+      <Route path="/trivia/name" element={<NameGuessPage />} />
+      <Route path="/trivia/facts" element={<FactCheckPage />} />
+      <Route path="/trivia/drops" element={<ItemDropPage />} />
+    </Routes>
+  )
+}

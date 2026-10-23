@@ -1,11 +1,11 @@
 import initSqlJs from 'sql.js'
 import wasmUrl from 'sql.js/dist/sql-wasm.wasm?url'
-import dbUrl from './assets/monsters.db?url'
-import { useEffect, useState } from 'react'
+import dbUrl from '../assets/monsters.db?url'
 
 let dbPromise = null
 
-// Loads sql.js + the .db file once; later calls reuse the same promise
+// Loads sql.js + the .db file once; later calls reuse the same promise.
+// A failed load is not kept, so the next call can try again.
 export function getDb() {
   if (!dbPromise) {
     dbPromise = (async () => {
@@ -17,7 +17,10 @@ export function getDb() {
         }),
       ])
       return new SQL.Database(new Uint8Array(buffer))
-    })()
+    })().catch((err) => {
+      dbPromise = null
+      throw err
+    })
   }
   return dbPromise
 }
@@ -30,15 +33,4 @@ export function query(db, sql, params = []) {
   while (stmt.step()) rows.push(stmt.getAsObject())
   stmt.free()
   return rows
-}
-
-export function useDb() {
-  const [db, setDb] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    getDb().then(setDb).catch((err) => setError(err.message))
-  }, [])
-
-  return { db, error }
 }

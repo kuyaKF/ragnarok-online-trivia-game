@@ -1,5 +1,5 @@
-import { query } from '../db'
-import { shuffle } from './nameGuess'
+import { query } from '@/lib/db'
+import { shuffle } from '@/lib/shuffle'
 
 // Tuning knobs
 const OPTION_COUNT = 4

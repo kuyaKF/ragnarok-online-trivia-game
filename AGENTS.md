@@ -11,3 +11,14 @@ Frontend only: sql.js loads src/assets/monsters.db in the browser.
 - Keep plain JSX. No TypeScript migration.
 - After every change set, run `npm run build` and fix errors before continuing.
 - Extract a component or hook only when it is used in 2+ places or is a clear unit.
+
+## Structure
+
+- `src/app` routes only. `src/features/<name>` one folder per feature. `src/components/ui` and
+  `src/components/layout` shared UI. `src/hooks`, `src/lib` shared logic. Import with `@/`.
+- Colors come from the tokens in `src/styles/theme.css` (`bg-page`, `text-muted`, ...). Do not add raw
+  palette classes (`bg-gray-950`, `text-indigo-600`) to features or pages; add or reuse a token or
+  a component in `components/ui`.
+- Every trivia game uses `useRound`, `GameShell`, `DbGate` and renders each question in a component
+  keyed by the question id.
+

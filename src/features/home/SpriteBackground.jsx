@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useDb, query } from './db'
+import { useDb } from '@/hooks/useDb'
+import { query } from '@/lib/db'
+import { monsterSpriteUrl } from '@/lib/sprites'
 
 // Tuning knobs
 const CELL = 128        // px, size of one chess square
@@ -7,7 +9,6 @@ const PERIOD = 10       // must be even; different monsters = PERIODÂ² / 2 (10 â
 const SPEED = 19        // px per second along each axis, so the drift speed stays the same
 const DURATION = (PERIOD * CELL) / SPEED // seconds per loop, calculated for you
 const OPACITY = 0.18
-const spriteUrl = (id) => `/sprites/${id}.gif`
 
 const SPRITE_COUNT = (PERIOD * PERIOD) / 2 // one unique sprite per filled cell in the tile
 
@@ -79,7 +80,7 @@ export default function SpriteBackground() {
             style={{ left: c * CELL, top: r * CELL, width: CELL, height: CELL }}
           >
             <img
-              src={spriteUrl(id)}
+              src={monsterSpriteUrl(id)}
               alt=""
               draggable={false}
               className="max-h-[70%] max-w-[70%] object-contain"

@@ -1,0 +1,15 @@
+/* Diagonal drift for the homepage sprite background (see features/home/SpriteBackground.jsx) */
+@keyframes sprite-drift {
+  from { transform: translate3d(calc(var(--shift) * -1), calc(var(--shift) * -1), 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+.sprite-drift {
+  animation: sprite-drift var(--duration) linear infinite;
+  will-change: transform;
+}
+
+/* Respect the visitor's "reduce motion" setting */
+@media (prefers-reduced-motion: reduce) {
+  .sprite-drift { animation: none; }
+}

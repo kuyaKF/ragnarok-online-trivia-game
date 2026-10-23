@@ -1,4 +1,4 @@
-import { query } from '../db'
+import { query } from '@/lib/db'
 
 const PARAMS = ['level', 'race', 'property', 'size']
 const LABELS = { level: 'Level', race: 'Race', property: 'Property', size: 'Size' }

@@ -1,0 +1,60 @@
+/*
+ * Theme tokens.
+ *
+ * Every token points at a color from Tailwind's built-in palette, so the look
+ * of the app is defined here and nowhere else. To retheme, change a value on
+ * the right-hand side (or override the variable under a class or media query).
+ *
+ * Use them like any Tailwind color: bg-page, text-muted, border-line, ring-focus-ring ...
+ */
+@theme {
+  /* Surfaces */
+  --color-page: var(--color-gray-950);        /* page background */
+  --color-panel: var(--color-white);          /* cards and panels */
+  --color-well: var(--color-gray-200);        /* box behind sprites */
+  --color-chip: var(--color-gray-100);        /* stat tiles, chips, neutral banner */
+  --color-subtle: var(--color-gray-50);       /* hovered rows, table head, dimmed option */
+
+  /* Text on the dark page */
+  --color-on-page: var(--color-white);
+  --color-on-page-soft: var(--color-gray-300);
+  --color-on-page-muted: var(--color-gray-400);
+  --color-on-page-faint: var(--color-gray-500);
+
+  /* Text on panels, darkest to lightest */
+  --color-ink: var(--color-gray-900);
+  --color-body: var(--color-gray-800);
+  --color-soft: var(--color-gray-700);
+  --color-quiet: var(--color-gray-600);
+  --color-muted: var(--color-gray-500);
+  --color-faint: var(--color-gray-400);
+
+  /* Lines */
+  --color-line: var(--color-gray-200);
+  --color-line-soft: var(--color-gray-100);
+  --color-line-strong: var(--color-gray-300);
+
+  /* Accent */
+  --color-accent: var(--color-indigo-600);         /* primary buttons, links on panels */
+  --color-accent-hover: var(--color-indigo-700);
+  --color-accent-soft: var(--color-indigo-50);     /* hovered option background */
+  --color-accent-edge: var(--color-indigo-400);    /* hovered option border */
+  --color-link: var(--color-indigo-400);           /* links on the dark page */
+  --color-focus: var(--color-indigo-500);
+  --color-focus-ring: var(--color-indigo-200);
+
+  /* Feedback: correct */
+  --color-success-soft: var(--color-green-100);
+  --color-success-text: var(--color-green-800);
+  --color-success-edge: var(--color-green-500);
+  --color-success-ink: var(--color-green-900);
+  --color-success-label: var(--color-green-600);
+
+  /* Feedback: wrong */
+  --color-danger-soft: var(--color-red-100);
+  --color-danger-text: var(--color-red-800);
+  --color-danger-edge: var(--color-red-500);
+  --color-danger-ink: var(--color-red-900);
+  --color-danger-label: var(--color-red-600);
+  --color-danger-on-page: var(--color-red-400);
+}
