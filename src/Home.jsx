@@ -14,14 +14,14 @@ const GAMES = [
   {
     title: 'Guess the Monster',
     to: '/trivia/name',
-    image: '/covers/guess-monster.jpg',
-    color: 'bg-emerald-800',
+    image: '/covers/guess-monster.png',
+    color: 'bg-gradient-to-br from-sky-950 via-sky-800 to-cyan-400',
   },
   {
     title: 'True or False',
     to: '/trivia/facts',
-    image: '/covers/true-or-false.jpg',
-    color: 'bg-amber-800',
+    image: '/covers/true-or-false.png',
+    color: 'bg-gradient-to-br from-indigo-900 via-violet-700 to-violet-300',
   },
   {
     title: 'Item Drops',
