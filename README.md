@@ -10,6 +10,7 @@ A web-based trivia game about Ragnarok Online, featuring a monster database with
   - **True or False**: Spot the true (or false) statement about a monster
   - **Item Drops**: Pick a monster that drops the item shown
 - **Monster Details**: Attributes, elements, resistances, drops, modes, and spawning maps
+- **Gift Box Simulator**: Open boxes for random items with rarity tiers, keep them in an inventory saved in your browser for 24 hours, and trash what you don't want
 - **Responsive Design**: Works well on mobile and desktop
 
 ## Tech Stack
@@ -18,6 +19,7 @@ A web-based trivia game about Ragnarok Online, featuring a monster database with
 - **Vite** for development and building
 - **Tailwind CSS v4** for styling
 - **sql.js** for an in-browser SQLite database (no backend)
+- **canvas-confetti** for the box-opening celebration (loaded on demand)
 
 ## Scripts
 
@@ -40,13 +42,16 @@ src/
   features/
     home/         Homepage and the animated sprite background
     database/     Monster list and detail pages (filters, queries, table, pagination)
+    collection/   Shared engine for box-opening games: saved inventory with expiry, rarity
+                  picker, inventory grid, trash dialogs, reveal panel
+    giftbox/      Gift Box Simulator (item pool, rarity rules, box icons)
     trivia/
       name/       Guess the Monster
       facts/      True or False
       drops/      Item Drops
       shared/     RoundComplete screen
   hooks/          useDb (shared database), useRound (queue + score for any game)
-  lib/            db (sql.js loader + query), sprites (image URLs), shuffle
+  lib/            db (sql.js loader + query), sprites (image URLs), shuffle, storage (safe localStorage)
   styles/         theme.css (color tokens), animations.css
   assets/         monsters.db
 ```
@@ -71,6 +76,21 @@ of the homepage cards.
    `OptionButton` and `RoundComplete` for the UI.
 3. Add a route in `src/app/App.jsx` and a card in `GAMES` in `src/features/home/HomePage.jsx`.
 
+## Collection games (Gift Box)
+
+`features/collection` is a reusable engine; a game only supplies its content: the item `pool`
+(each item has a rarity `tier`), the `odds` of each tier, the cosmetic `boxes`, and a `Visual`
+component that draws an item. See `features/giftbox/GiftBoxPage.jsx` for a complete example.
+
+- Boxes open in a modal: rumble, zoom out, zoom in with a flash, then the reward and confetti.
+  Timings are `DURATIONS` in `features/collection/CollectionGame.jsx`; confetti per rarity is in
+  `features/collection/confetti.js`. Nothing is added to the inventory until the reveal.
+- The inventory is saved in `localStorage` (key set per game) and expires 24 hours after the
+  player's last action. Change `EXPIRY_MODE` or `TTL_MS` in `features/collection/inventory.js`.
+- Rarity comes from each item's best drop rate (`features/giftbox/giftBoxPool.js`); the chance of
+  each tier is `ODDS` in `features/giftbox/giftBoxConfig.js`.
+- Saved data lives only in the visitor's browser, per site address.
+
 ## Database
 
 Monster data is loaded from `src/assets/monsters.db` using sql.js (WebAssembly). It contains
@@ -85,3 +105,4 @@ monster stats, elements, resistances, drops, and spawning locations. Sprites are
 - `/trivia/name` - Guess the Monster
 - `/trivia/facts` - True or False
 - `/trivia/drops` - Item Drops
+- `/giftbox` - Gift Box Simulator

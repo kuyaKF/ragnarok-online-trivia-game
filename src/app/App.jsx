@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import DatabasePage from '@/features/database/DatabasePage'
 import MonsterDetailPage from '@/features/database/MonsterDetailPage'
+import GiftBoxPage from '@/features/giftbox/GiftBoxPage'
 import HomePage from '@/features/home/HomePage'
 import ItemDropPage from '@/features/trivia/drops/ItemDropPage'
 import FactCheckPage from '@/features/trivia/facts/FactCheckPage'
@@ -15,6 +16,7 @@ export default function App() {
       <Route path="/trivia/name" element={<NameGuessPage />} />
       <Route path="/trivia/facts" element={<FactCheckPage />} />
       <Route path="/trivia/drops" element={<ItemDropPage />} />
+      <Route path="/giftbox" element={<GiftBoxPage />} />
     </Routes>
   )
 }

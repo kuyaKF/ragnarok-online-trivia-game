@@ -13,3 +13,77 @@
 @media (prefers-reduced-motion: reduce) {
   .sprite-drift { animation: none; }
 }
+
+/*
+ * Opening a box (features/collection/OpeningModal.jsx):
+ *   rumble + swell  ->  zoom out  ->  zoom in and flash  ->  reward
+ * Durations come from the --phase-ms variable set by the component.
+ */
+@keyframes stage-rumble {
+  0% { transform: rotate(0deg); }
+  3.57% { transform: rotate(-3.4deg); }
+  7.14% { transform: rotate(3.8deg); }
+  10.71% { transform: rotate(-4.2deg); }
+  14.29% { transform: rotate(4.6deg); }
+  17.86% { transform: rotate(-5.0deg); }
+  21.43% { transform: rotate(5.4deg); }
+  25.0% { transform: rotate(-5.8deg); }
+  28.57% { transform: rotate(6.1deg); }
+  32.14% { transform: rotate(-6.5deg); }
+  35.71% { transform: rotate(6.9deg); }
+  39.29% { transform: rotate(-7.3deg); }
+  42.86% { transform: rotate(7.7deg); }
+  46.43% { transform: rotate(-8.1deg); }
+  50.0% { transform: rotate(8.5deg); }
+  53.57% { transform: rotate(-8.9deg); }
+  57.14% { transform: rotate(9.3deg); }
+  60.71% { transform: rotate(-9.7deg); }
+  64.29% { transform: rotate(10.1deg); }
+  67.86% { transform: rotate(-10.5deg); }
+  71.43% { transform: rotate(10.9deg); }
+  75.0% { transform: rotate(-11.2deg); }
+  78.57% { transform: rotate(11.6deg); }
+  82.14% { transform: rotate(-12.0deg); }
+  85.71% { transform: rotate(12.4deg); }
+  89.29% { transform: rotate(-12.8deg); }
+  92.86% { transform: rotate(13.2deg); }
+  96.43% { transform: rotate(-13.6deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes stage-swell {
+  from { transform: scale(1); }
+  to { transform: scale(1.3); }
+}
+
+@keyframes stage-zoomout {
+  from { transform: scale(1.3); }
+  to { transform: scale(0.55); }
+}
+
+@keyframes stage-zoomin {
+  from { transform: scale(0.55); opacity: 1; filter: brightness(1); }
+  to { transform: scale(2.6); opacity: 0; filter: brightness(2.5); }
+}
+
+@keyframes stage-flash {
+  from { opacity: 0; }
+  to { opacity: 0.85; }
+}
+
+.stage-rumble { animation: stage-rumble var(--phase-ms) linear forwards; }
+.stage-swell { animation: stage-swell var(--phase-ms) ease-in forwards; }
+.stage-zoomout { animation: stage-zoomout var(--phase-ms) ease-in forwards; }
+.stage-zoomin { animation: stage-zoomin var(--phase-ms) ease-out forwards; }
+.stage-flash { animation: stage-flash var(--phase-ms) ease-out forwards; }
+
+@keyframes reveal-pop {
+  from { opacity: 0; transform: scale(0.8) translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.reveal-pop { animation: reveal-pop 0.35s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-rumble, .stage-swell, .stage-zoomout, .stage-zoomin, .stage-flash, .reveal-pop { animation: none; }
+}

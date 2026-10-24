@@ -4,6 +4,9 @@ const VARIANTS = {
     'rounded-lg bg-accent px-4 py-2 font-medium text-white hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40',
   // Full-width "Next" button inside a panel (add w-full via className)
   dark: 'rounded-lg bg-ink px-4 py-2 font-medium text-white hover:bg-soft',
+  // Destructive action (Trash, Reset)
+  danger:
+    'rounded-lg bg-danger px-4 py-2 font-medium text-white hover:bg-danger-hover disabled:cursor-not-allowed disabled:opacity-40',
   // Small bordered button (pagination)
   outline:
     'rounded-md border border-line-strong bg-panel px-3 py-1.5 text-sm font-medium text-soft hover:bg-subtle disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-panel',
