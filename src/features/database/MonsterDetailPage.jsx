@@ -60,7 +60,7 @@ function MonsterDetail({ db, id }) {
 
   if (!m) {
     return (
-      <div className="min-h-screen bg-page p-8">
+      <div className="relative z-10 min-h-screen p-8">
         <p className="text-on-page-soft">No monster with ID {id}.</p>
         <Link to="/db" className="text-link hover:underline">← Back to database</Link>
       </div>

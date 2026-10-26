@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import SpriteBackground from './SpriteBackground'
 
 // `color` shows until the cover image loads (or if it's missing).
 // Add a game here and it appears on the homepage.
@@ -51,31 +50,28 @@ function GameCard({ game }) {
 
 export default function HomePage() {
   return (
-    <main className="relative isolate min-h-screen bg-page px-6 py-16">
-      <SpriteBackground />
-      <div className="relative z-10">
-        <header className="mx-auto max-w-5xl text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-on-page sm:text-6xl">
-            Ragnarok Online Trivia
-          </h1>
-          <p className="mt-3 text-lg text-on-page-muted">Test your knowledge, made by Felix</p>
-        </header>
+    <main className="relative z-10 min-h-screen px-6 py-16">
+      <header className="mx-auto max-w-5xl text-center">
+        <h1 className="text-4xl font-extrabold tracking-tight text-on-page sm:text-6xl">
+          Ragnarok Online Trivia
+        </h1>
+        <p className="mt-3 text-lg text-on-page-muted">Test your knowledge, made by Felix</p>
+      </header>
 
-        <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-          {GAMES.map((game) => (
-            <GameCard key={game.to} game={game} />
-          ))}
-        </div>
-
-        <footer className="mt-16 text-center text-xs text-on-page-faint">
-          <Link to="/db" className="hover:text-on-page-soft hover:underline">
-            Browse the monster database
-          </Link>
-          <p className="mt-2">
-            Fan-made project, not affiliated with Gravity. Game data and sprites from ratemyserver.net.
-          </p>
-        </footer>
+      <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+        {GAMES.map((game) => (
+          <GameCard key={game.to} game={game} />
+        ))}
       </div>
+
+      <footer className="mt-16 text-center text-xs text-on-page-faint">
+        <Link to="/db" className="hover:text-on-page-soft hover:underline">
+          Browse the monster database
+        </Link>
+        <p className="mt-2">
+          Fan-made project, not affiliated with Gravity. Game data and sprites from ratemyserver.net.
+        </p>
+      </footer>
     </main>
   )
 }
