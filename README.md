@@ -38,9 +38,10 @@ src/
   components/
     ui/           Reusable building blocks: Button, Panel, Banner, SpriteBox, Stat,
                   Section, Badge, Input, Select, OptionButton
-    layout/       PageShell, GameShell, DbGate, BackLink, PageMessage
+    layout/       AppLayout (page color + sprite background for every page), SpriteBackground,
+                  PageShell, GameShell, DbGate, BackLink, PageMessage
   features/
-    home/         Homepage and the animated sprite background
+    home/         Homepage
     database/     Monster list and detail pages (filters, queries, table, pagination)
     collection/   Shared engine for box-opening games: saved inventory with expiry, rarity
                   picker, inventory grid, trash dialogs, reveal panel
