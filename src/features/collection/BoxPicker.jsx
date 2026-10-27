@@ -12,7 +12,7 @@ export default function BoxPicker({ boxes, activeBox, onOpen }) {
             key={box.id}
             onClick={() => onOpen(1, box)}
             aria-label={`Open a ${box.name}`}
-            className="group flex flex-col items-center rounded-2xl border-2 border-line bg-chip px-2 py-6 hover:border-accent-edge hover:bg-accent-soft"
+            className="group flex flex-col items-center rounded-2xl border-2 border-line bg-chip px-2 py-6 cursor-pointer hover:border-accent-edge hover:bg-accent-soft"
           >
             <img
               src={box.icon}

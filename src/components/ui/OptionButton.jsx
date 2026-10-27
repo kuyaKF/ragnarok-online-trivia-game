@@ -14,14 +14,14 @@ const STATE_COLORS = {
 
 const LAYOUTS = {
   row: {
-    base: 'w-full rounded-lg border px-4 py-3 text-left transition',
+    base: 'w-full rounded-lg border px-4 py-3 text-left transition cursor-pointer',
     idle: 'border-line-strong',
     correct: 'text-success-ink',
     wrong: 'text-danger-ink',
     dimmed: 'border-line text-faint',
   },
   card: {
-    base: 'flex flex-col items-center rounded-lg border-2 p-3 text-center transition',
+    base: 'flex flex-col items-center rounded-lg border-2 p-3 text-center transition cursor-pointer',
     idle: 'border-line',
     correct: '',
     wrong: '',
