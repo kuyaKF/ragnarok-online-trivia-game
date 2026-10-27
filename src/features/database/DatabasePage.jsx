@@ -42,6 +42,8 @@ function DatabaseView({ db }) {
       </div>
 
       <FilterBar filters={filters} options={options} onChange={updateFilter} onReset={resetFilters} />
+      
+      <Pagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} />
       <MonsterTable rows={rows} />
       <Pagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} />
     </PageShell>
