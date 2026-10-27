@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Badge from '@/components/ui/Badge'
 import Panel from '@/components/ui/Panel'
 import SpriteBox from '@/components/ui/SpriteBox'
@@ -17,6 +17,9 @@ const HEADERS = [
 ]
 
 export default function MonsterTable({ rows }) {
+  // Handed to the detail page so its "Back to database" link returns to this exact page and filters
+  const { search } = useLocation()
+
   return (
     <Panel className="overflow-x-auto">
       <table className="min-w-full divide-y divide-line text-sm">
@@ -48,7 +51,11 @@ export default function MonsterTable({ rows }) {
               </td>
               <td className="px-4 py-2 tabular-nums text-muted">{m.id}</td>
               <td className="px-4 py-2">
-                <Link to={`/db/${m.id}`} className="font-medium text-accent hover:underline">
+                <Link
+                  to={`/db/${m.id}`}
+                  state={{ from: search }}
+                  className="font-medium text-accent hover:underline"
+                >
                   {m.name}
                 </Link>
                 <div className="text-xs text-faint">{m.internal_name}</div>

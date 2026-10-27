@@ -1,37 +1,63 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import BackLink from '@/components/layout/BackLink'
 import DbGate from '@/components/layout/DbGate'
 import PageShell from '@/components/layout/PageShell'
 import FilterBar from './FilterBar'
 import MonsterTable from './MonsterTable'
 import Pagination from './Pagination'
-import { EMPTY_FILTERS, PAGE_SIZE, buildWhere } from './filters'
+import {
+  PAGE_SIZE,
+  buildWhere,
+  clearFilterParams,
+  filtersFromParams,
+  pageFromParams,
+  setFilterParam,
+  setPageParam,
+} from './filters'
 import { countMonsters, getFilterOptions, listMonsters } from './queries'
 
 export default function DatabasePage() {
   return <DbGate>{(db) => <DatabaseView db={db} />}</DbGate>
 }
 
+/*
+ * The page and the filters live in the URL (/db?page=2&race=Dragon), so Back, Forward,
+ * refresh and shared links all show the same list. Changing a filter replaces the current
+ * history entry (so Back doesn't step through every keystroke); changing the page adds one.
+ */
 function DatabaseView({ db }) {
-  const [page, setPage] = useState(1)
-  const [filters, setFilters] = useState(EMPTY_FILTERS)
-
-  // Dropdown options come from the data itself
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const options = useMemo(() => getFilterOptions(db), [db])
 
-  function updateFilter(key, value) {
-    setFilters((f) => ({ ...f, [key]: value }))
-    setPage(1) // a new filter always starts from the first page
-  }
+  // The newest query string, including changes the router hasn't shown yet,
+  // so two quick changes (like Min and Max level) don't overwrite each other
+  const latest = useRef(searchParams)
+  useEffect(() => {
+    latest.current = searchParams
+  }, [searchParams])
 
-  function resetFilters() {
-    setFilters(EMPTY_FILTERS)
-    setPage(1)
-  }
+  const update = useCallback(
+    (change, replace) => {
+      const next = new URLSearchParams(latest.current)
+      change(next)
+      latest.current = next
+      const search = next.toString()
+      navigate({ search: search ? `?${search}` : '' }, { replace })
+    },
+    [navigate]
+  )
 
+  const updateFilter = useCallback((key, value) => update((p) => setFilterParam(p, key, value), true), [update])
+  const resetFilters = useCallback(() => update(clearFilterParams, true), [update])
+  const goToPage = (page) => update((p) => setPageParam(p, page), false)
+
+  const filters = filtersFromParams(searchParams, options)
   const { where, params } = buildWhere(filters)
   const total = countMonsters(db, where, params)
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const page = Math.min(pageFromParams(searchParams), totalPages)
   const rows = listMonsters(db, where, params, page, PAGE_SIZE)
 
   return (
@@ -42,10 +68,26 @@ function DatabaseView({ db }) {
       </div>
 
       <FilterBar filters={filters} options={options} onChange={updateFilter} onReset={resetFilters} />
-      
-      <Pagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} />
+      <Pagination
+        label="Pagination, top"
+        className="mb-4"
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={goToPage}
+      />
       <MonsterTable rows={rows} />
-      <Pagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} />
+      <Pagination
+        label="Pagination, bottom"
+        className="mt-4"
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={(n) => {
+          goToPage(n)
+          window.scrollTo({ top: 0 }) // you are at the bottom of the page, so go back up
+        }}
+      />
     </PageShell>
   )
 }

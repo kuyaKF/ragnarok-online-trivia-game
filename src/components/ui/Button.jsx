@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const VARIANTS = {
   // Main action (Guess, Play again)
   primary:
@@ -18,4 +20,9 @@ const VARIANTS = {
 
 export default function Button({ variant = 'primary', className = '', ...props }) {
   return <button className={`${VARIANTS[variant]} ${className}`.trim()} {...props} />
+}
+
+// A link that looks like a button
+export function ButtonLink({ variant = 'primary', className = '', ...props }) {
+  return <Link className={`${VARIANTS[variant]} ${className}`.trim()} {...props} />
 }

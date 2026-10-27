@@ -1,6 +1,7 @@
-import { Link, useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import BackLink from '@/components/layout/BackLink'
 import DbGate from '@/components/layout/DbGate'
+import NotFound from '@/components/layout/NotFound'
 import PageShell from '@/components/layout/PageShell'
 import Badge from '@/components/ui/Badge'
 import Panel from '@/components/ui/Panel'
@@ -58,12 +59,21 @@ function DropList({ drops }) {
 function MonsterDetail({ db, id }) {
   const m = getMonster(db, id)
 
+  // The list page we came from (?page=2&race=...), so Back returns to the same page and filters
+  const { state } = useLocation()
+  const from = typeof state?.from === 'string' && state.from.startsWith('?') ? state.from : ''
+  const backTo = `/db${from}`
+
   if (!m) {
     return (
-      <div className="relative z-10 min-h-screen p-8">
-        <p className="text-on-page-soft">No monster with ID {id}.</p>
-        <Link to="/db" className="text-link hover:underline">← Back to database</Link>
-      </div>
+      <NotFound
+        title="Monster not found"
+        message={`There's no monster with ID ${id}.`}
+        links={[
+          { to: backTo, label: '← Back to the database' },
+          { to: '/', label: 'Go to the homepage' },
+        ]}
+      />
     )
   }
 
@@ -73,7 +83,7 @@ function MonsterDetail({ db, id }) {
 
   return (
     <PageShell width="max-w-4xl">
-      <BackLink to="/db">← Back to database</BackLink>
+      <BackLink to={backTo}>← Back to database</BackLink>
 
       <Panel className="mt-4 p-6">
         <div className="flex items-center gap-5">
