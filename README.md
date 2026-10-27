@@ -39,10 +39,11 @@ src/
     ui/           Reusable building blocks: Button, Panel, Banner, SpriteBox, Stat,
                   Section, Badge, Input, Select, OptionButton
     layout/       AppLayout (page color + sprite background for every page), SpriteBackground,
-                  PageShell, GameShell, DbGate, BackLink, PageMessage
+                  PageShell, GameShell, DbGate, BackLink, PageMessage, NotFound, ScrollToTop
   features/
     home/         Homepage
     database/     Monster list and detail pages (filters, queries, table, pagination)
+    not-found/    404 page
     collection/   Shared engine for box-opening games: saved inventory with expiry, rarity
                   picker, inventory grid, trash dialogs, reveal panel
     giftbox/      Gift Box Simulator (item pool, rarity rules, box icons)
@@ -51,7 +52,8 @@ src/
       facts/      True or False
       drops/      Item Drops
       shared/     RoundComplete screen
-  hooks/          useDb (shared database), useRound (queue + score for any game)
+  hooks/          useDb (shared database), useRound (queue + score for any game),
+                  useSyncedDraft (text box that also lives in the URL)
   lib/            db (sql.js loader + query), sprites (image URLs), shuffle, storage (safe localStorage)
   styles/         theme.css (color tokens), animations.css
   assets/         monsters.db
@@ -101,9 +103,10 @@ monster stats, elements, resistances, drops, and spawning locations. Sprites are
 ## Routes
 
 - `/` - Home page
-- `/db` - Monster database
+- `/db` - Monster database. The page and filters are in the address (for example `/db?page=2&race=Dragon&min=50`), so Back, refresh and shared links keep your place
 - `/db/:id` - Monster profile
 - `/trivia/name` - Guess the Monster
 - `/trivia/facts` - True or False
 - `/trivia/drops` - Item Drops
 - `/giftbox` - Gift Box Simulator
+- anything else - 404 page with a link home

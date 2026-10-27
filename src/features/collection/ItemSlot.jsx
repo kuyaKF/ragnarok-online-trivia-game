@@ -9,7 +9,7 @@ export default function ItemSlot({ entry, Visual, selected, onSelect }) {
       title={`${item.name} ×${count}`}
       aria-label={`${item.name}, ${count} owned`}
       aria-pressed={selected}
-      className={`relative flex aspect-square items-center justify-center rounded-md border-2 bg-well ${TIERS[item.tier].border} ${selected ? 'ring-2 ring-accent' : ''}`}
+      className={`relative flex aspect-square items-center justify-center rounded-md border-2 bg-well cursor-pointer ${TIERS[item.tier].border} ${selected ? 'ring-2 ring-accent' : ''}`}
     >
       <Visual item={item} size="slot" />
       {count > 1 && (

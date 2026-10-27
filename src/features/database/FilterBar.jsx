@@ -2,10 +2,23 @@ import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Panel from '@/components/ui/Panel'
 import Select from '@/components/ui/Select'
+import { useSyncedDraft } from '@/hooks/useSyncedDraft'
 
 const FIELD_LABEL = 'flex flex-col text-xs font-medium text-muted'
 
 export default function FilterBar({ filters, options, onChange, onReset }) {
+  // Text boxes show what you type at once and reach the URL a moment later
+  const [search, setSearch] = useSyncedDraft(filters.search, (v) => onChange('search', v))
+  const [minLevel, setMinLevel] = useSyncedDraft(filters.minLevel, (v) => onChange('minLevel', v))
+  const [maxLevel, setMaxLevel] = useSyncedDraft(filters.maxLevel, (v) => onChange('maxLevel', v))
+
+  function handleReset() {
+    setSearch('')
+    setMinLevel('')
+    setMaxLevel('')
+    onReset()
+  }
+
   return (
     <Panel className="mb-4 p-4">
       <div className="flex flex-wrap items-end gap-3">
@@ -13,8 +26,8 @@ export default function FilterBar({ filters, options, onChange, onReset }) {
           Search
           <Input
             type="text"
-            value={filters.search}
-            onChange={(e) => onChange('search', e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Name or internal name"
             className="mt-1"
           />
@@ -46,8 +59,8 @@ export default function FilterBar({ filters, options, onChange, onReset }) {
             <Input
               type="number"
               min="1"
-              value={filters.minLevel}
-              onChange={(e) => onChange('minLevel', e.target.value)}
+              value={minLevel}
+              onChange={(e) => setMinLevel(e.target.value)}
               placeholder="Min"
               className="w-20"
             />
@@ -55,8 +68,8 @@ export default function FilterBar({ filters, options, onChange, onReset }) {
             <Input
               type="number"
               min="1"
-              value={filters.maxLevel}
-              onChange={(e) => onChange('maxLevel', e.target.value)}
+              value={maxLevel}
+              onChange={(e) => setMaxLevel(e.target.value)}
               placeholder="Max"
               className="w-20"
             />
@@ -81,7 +94,7 @@ export default function FilterBar({ filters, options, onChange, onReset }) {
           />
           Hide guild variants
         </label>
-        <Button variant="link" onClick={onReset} className="ml-auto">
+        <Button variant="link" onClick={handleReset} className="ml-auto">
           Reset filters
         </Button>
       </div>

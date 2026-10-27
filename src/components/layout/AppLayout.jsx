@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import ScrollToTop from './ScrollToTop'
 import SpriteBackground from './SpriteBackground'
 
 /*
@@ -11,6 +12,7 @@ import SpriteBackground from './SpriteBackground'
 export default function AppLayout() {
   return (
     <div className="isolate min-h-screen bg-page">
+      <ScrollToTop />
       <SpriteBackground />
       <Outlet />
     </div>
