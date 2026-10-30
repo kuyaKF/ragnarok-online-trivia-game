@@ -8,7 +8,11 @@ const CELL = 128        // px, size of one chess square
 const PERIOD = 10       // must be even; different monsters = PERIOD² / 2 (10 → 50, 12 → 72)
 const SPEED = 19        // px per second along each axis, so the drift speed stays the same
 const DURATION = (PERIOD * CELL) / SPEED // seconds per loop, calculated for you
-const OPACITY = 0.18
+const OPACITY = 0.18   // how faint a sprite is until you hover it
+
+// What a sprite does when you hover it (the animations are in styles/animations.css).
+// Each monster always uses the same one, picked from its id.
+const EFFECTS = ['jump', 'spin', 'wiggle', 'pop']
 
 const SPRITE_COUNT = (PERIOD * PERIOD) / 2 // one unique sprite per filled cell in the tile
 
@@ -68,7 +72,8 @@ export default function SpriteBackground() {
         style={{
           width: cols * CELL,
           height: rows * CELL,
-          opacity: tile ? OPACITY : 0, // fades in once the database has loaded
+          opacity: tile ? 1 : 0, // fades in once the database has loaded
+          '--sprite-opacity': OPACITY, // each sprite is faint on its own, so a hovered one can go to full
           '--shift': `${PERIOD * CELL}px`,
           '--duration': `${DURATION}s`,
         }}
@@ -76,14 +81,14 @@ export default function SpriteBackground() {
         {cells.map(({ key, id, r, c }) => (
           <div
             key={key}
-            className="absolute flex items-center justify-center"
+            className="sprite-cell pointer-events-auto absolute flex items-center justify-center"
             style={{ left: c * CELL, top: r * CELL, width: CELL, height: CELL }}
           >
             <img
               src={monsterSpriteUrl(id)}
               alt=""
               draggable={false}
-              className="max-h-[70%] max-w-[70%] object-contain"
+              className={`sprite-img sprite-fx-${EFFECTS[id % EFFECTS.length]} max-h-[70%] max-w-[70%] object-contain`}
             />
           </div>
         ))}

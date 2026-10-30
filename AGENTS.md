@@ -22,3 +22,4 @@ Frontend only: sql.js loads src/assets/monsters.db in the browser.
 - Every trivia game uses `useRound`, `GameShell`, `DbGate` and renders each question in a component
   keyed by the question id.
 - Box-opening games reuse `features/collection` (`CollectionGame`); a new one only needs its own pool, odds, boxes and `Visual`.
+- Page wrappers are `pointer-events-none` so the mouse reaches the background sprites. Put clickable content inside `PageShell`'s column, or give it `pointer-events-auto` (the homepage does this for its header, grid and footer).
